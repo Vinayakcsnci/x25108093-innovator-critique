@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MangoMind – Investor Pitch Deck</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --orange: #FF6B35; --teal: #00A896; --dark: #1A1A2E;
+      --light: #F7F9FC; --mid: #4A5568; --white: #FFFFFF;
+    }
+    body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0D1117; color: var(--white); }
+    .slide { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 5vw 8vw; border-bottom: 2px solid #1F2937; position: relative; }
+    .slide-num { position: absolute; top: 2rem; right: 2.5rem; font-size: 0.8rem; color: #4B5563; font-weight: 600; }
+    .tag { display: inline-block; background: rgba(255,107,53,0.15); border: 1px solid var(--orange); color: var(--orange); padding: 0.3rem 1rem; border-radius: 20px; font-size: 0.8rem; font-weight: 700; margin-bottom: 1.5rem; }
+    h1 { font-size: clamp(2rem, 5vw, 4rem); font-weight: 900; line-height: 1.1; margin-bottom: 1rem; }
+    h2 { font-size: clamp(1.5rem, 3vw, 2.5rem); font-weight: 800; margin-bottom: 1.2rem; color: var(--white); }
+    h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--orange); }
+    p, li { color: #9CA3AF; font-size: 1rem; line-height: 1.7; }
+    .accent { color: var(--orange); }
+    .teal { color: var(--teal); }
+    .grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin-top: 2rem; }
+    .grid3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+    .card { background: #1F2937; border-radius: 12px; padding: 1.8rem; border: 1px solid #374151; }
+    .big-stat { font-size: clamp(2.5rem, 6vw, 5rem); font-weight: 900; color: var(--orange); }
+    .big-stat-label { color: #9CA3AF; font-size: 0.9rem; margin-top: 0.25rem; }
+    table { width: 100%; border-collapse: collapse; margin-top: 1.5rem; font-size: 0.9rem; }
+    th { background: #1F2937; color: var(--teal); padding: 0.75rem 1rem; text-align: left; border-bottom: 2px solid #374151; }
+    td { padding: 0.75rem 1rem; border-bottom: 1px solid #1F2937; color: #D1D5DB; }
+    tr:hover td { background: #1C2534; }
+    .progress { background: #374151; border-radius: 4px; height: 8px; margin-top: 0.5rem; }
+    .progress-bar { background: var(--orange); border-radius: 4px; height: 8px; }
+    ul { padding-left: 1.2rem; }
+    ul li { margin-bottom: 0.4rem; }
+    .divider { width: 60px; height: 4px; background: var(--orange); border-radius: 2px; margin-bottom: 1.5rem; }
+    .ask-box { background: linear-gradient(135deg, rgba(255,107,53,0.2), rgba(0,168,150,0.1)); border: 2px solid var(--orange); border-radius: 16px; padding: 3rem; text-align: center; max-width: 700px; margin: 2rem auto; }
+    .ask-amount { font-size: clamp(3rem, 8vw, 6rem); font-weight: 900; color: var(--orange); }
+    nav-slide { display: flex; gap: 1rem; justify-content: center; padding: 2rem; background: #0D1117; flex-wrap: wrap; }
+    .slide-nav { background: #161B22; padding: 1.5rem 2rem; text-align: center; }
+    .slide-nav a { color: #6B7280; margin: 0 0.5rem; font-size: 0.85rem; text-decoration: none; }
+    .slide-nav a:hover { color: var(--orange); }
+  </style>
+</head>
+<body>
+
+<!-- SLIDE 1: Cover -->
+<section class="slide" style="background: linear-gradient(135deg, #0D1117 0%, #1A1A2E 100%); text-align:center; align-items:center;">
+  <div class="slide-num">1 / 12</div>
+  <div class="tag">Seed Round · €2M · April 2026</div>
+  <h1><span class="accent">Mango</span>Mind</h1>
+  <p style="font-size:1.3rem; color:#D1D5DB; max-width:600px;">AI-powered burnout risk intelligence for Irish SMBs.<br/>Know your team is burning out — before they do.</p>
+  <br/>
+  <p style="font-size:0.9rem; color:#4B5563;">Aoife Brennan, CEO · Ronan Fahy, CTO · Dr. Ciarán Ó Murchú, CSO<br/>Dublin, Ireland · contact@mangomind.ai</p>
+</section>
+
+<!-- SLIDE 2: The Problem -->
+<section class="slide">
+  <div class="slide-num">2 / 12</div>
+  <div class="tag">The Problem</div>
+  <h2>Burnout is predictable.<br/>Irish businesses <span class="accent">can't see it coming.</span></h2>
+  <div class="divider"></div>
+  <div class="grid3">
+    <div class="card">
+      <div class="big-stat">€11B</div>
+      <div class="big-stat-label">Annual cost of workplace mental health in Ireland (lost productivity, absenteeism, turnover)</div>
+    </div>
+    <div class="card">
+      <div class="big-stat">78%</div>
+      <div class="big-stat-label">of burnout-related departures where retrospective warning signs were identified but not acted upon (IBEC 2023)</div>
+    </div>
+    <div class="card">
+      <div class="big-stat">€14K</div>
+      <div class="big-stat-label">Average cost to replace one burned-out employee (CIPD Ireland 2024)</div>
+    </div>
+  </div>
+  <br/>
+  <p>Existing solutions fail: annual surveys are retrospective, EAPs require self-referral, and wellness apps don't detect burnout — they manage coping. <strong style="color:var(--white);">SMBs have no early warning system.</strong></p>
+</section>
+
+<!-- SLIDE 3: Insight -->
+<section class="slide">
+  <div class="slide-num">3 / 12</div>
+  <div class="tag">The Insight</div>
+  <h2>Burnout leaves a <span class="accent">digital signal trail</span> weeks before crisis</h2>
+  <div class="divider"></div>
+  <p>Behavioural science and occupational psychology research demonstrate that burnout progression correlates with measurable changes in digital work patterns — increased after-hours messaging, meeting overload, declining response latency, sentiment degradation in communications.</p>
+  <br/>
+  <div class="grid2">
+    <div class="card">
+      <h3>The Dolphin Model</h3>
+      <p>Bottlenose dolphin pods detect individual stress through distributed micro-signals weeks before visible illness. No single signal is conclusive — the pattern is. MangoMind applies the same distributed-signal logic to workplace data.</p>
+    </div>
+    <div class="card">
+      <h3>The Lead Time Opportunity</h3>
+      <p>Research (Bakker & Demerouti, 2017; Maslach & Leiter, 2016) identifies a 2–4 week detectable signal window before clinical burnout onset. <strong style="color:var(--white);">That window is the product.</strong></p>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 4: The Solution -->
+<section class="slide">
+  <div class="slide-num">4 / 12</div>
+  <div class="tag">The Solution</div>
+  <h2>MangoMind: <span class="accent">Team-level burnout intelligence</span></h2>
+  <div class="divider"></div>
+  <div class="grid3">
+    <div class="card">
+      <h3>1. Anonymous Signal Capture</h3>
+      <p>Integrates with Slack, Teams, and Google Calendar. Captures metadata only — timing, frequency, density. Message content is never read.</p>
+    </div>
+    <div class="card">
+      <h3>2. On-Device Processing</h3>
+      <p>Raw signals processed on-device. Only aggregated, k-anonymised team vectors leave the processing boundary. GDPR-compliant by architecture.</p>
+    </div>
+    <div class="card">
+      <h3>3. Burnout Risk Index</h3>
+      <p>AI computes a Burnout Risk Index (BRI, 0–100) benchmarked against that team's own rolling 12-week baseline. No cross-company comparisons.</p>
+    </div>
+    <div class="card">
+      <h3>4. HR Dashboard</h3>
+      <p>Plain-language recommendations for HR managers. No individual names ever shown. Threshold alerts. EAP resource links.</p>
+    </div>
+    <div class="card">
+      <h3>5. Intervention Library</h3>
+      <p>Curated, evidence-based team interventions mapped to BRI severity levels. Manager guidance, not clinical advice.</p>
+    </div>
+    <div class="card">
+      <h3>6. 10-Minute Setup</h3>
+      <p>OAuth-based integration. No IT department required. Live in under 10 minutes. Mobile-first dashboard, accessible anywhere.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 5: Privacy -->
+<section class="slide">
+  <div class="slide-num">5 / 12</div>
+  <div class="tag">Privacy & Compliance</div>
+  <h2>Privacy is the <span class="accent">product</span>, not a feature</h2>
+  <div class="divider"></div>
+  <div class="grid2">
+    <div>
+      <h3>What MangoMind NEVER does:</h3>
+      <ul style="margin-top:0.75rem; list-style:none; padding:0;">
+        <li style="padding:0.5rem 0; border-bottom:1px solid #1F2937; color:#EF4444;">✗ &nbsp;Read message content</li>
+        <li style="padding:0.5rem 0; border-bottom:1px solid #1F2937; color:#EF4444;">✗ &nbsp;Show individual employee scores to HR</li>
+        <li style="padding:0.5rem 0; border-bottom:1px solid #1F2937; color:#EF4444;">✗ &nbsp;Store raw behavioural data beyond 24 hours</li>
+        <li style="padding:0.5rem 0; border-bottom:1px solid #1F2937; color:#EF4444;">✗ &nbsp;Infer protected characteristics</li>
+        <li style="padding:0.5rem 0; color:#EF4444;">✗ &nbsp;Make employment decisions</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Regulatory compliance stack:</h3>
+      <ul style="margin-top:0.75rem;">
+        <li><span class="teal">GDPR Article 6(1)(f)</span> — Legitimate interests basis; DPIA completed</li>
+        <li><span class="teal">EU AI Act</span> — Limited-risk classification; Article 50 transparency notices deployed to all employees</li>
+        <li><span class="teal">Irish Employment Law</span> — No performance assessment use case; no industrial relations trigger</li>
+        <li><span class="teal">Data hosting</span> — AWS eu-west-1 Dublin; no data leaves EU</li>
+      </ul>
+    </div>
+  </div>
+  <br/>
+  <div class="card" style="border-color:var(--teal);">
+    <p style="color:#D1D5DB;"><strong style="color:var(--teal);">Key differentiator:</strong> Our privacy architecture is a hard constraint, not a configuration. Competitors can turn off privacy protections. MangoMind cannot — it's in the code.</p>
+  </div>
+</section>
+
+<!-- SLIDE 6: Market -->
+<section class="slide">
+  <div class="slide-num">6 / 12</div>
+  <div class="tag">Market Opportunity</div>
+  <h2>A <span class="accent">€415M</span> addressable market within reach</h2>
+  <div class="divider"></div>
+  <table>
+    <tr><th>Segment</th><th>Count</th><th>Avg. Employees</th><th>ACV</th><th>TAM</th></tr>
+    <tr><td>Irish SMBs 50–250 employees</td><td>18,500</td><td>85</td><td>€22,440</td><td>€415M</td></tr>
+    <tr><td>UK SMBs (Year 2 expansion)</td><td>185,000</td><td>90</td><td>€23,760</td><td>€4.4B</td></tr>
+    <tr><td>EU-5 (Year 3+)</td><td>1.1M</td><td>80</td><td>€21,120</td><td>€23B</td></tr>
+  </table>
+  <br/>
+  <div class="grid3">
+    <div class="card">
+      <h3>Year 1 Target</h3>
+      <p>25 Irish customers<br/><span class="accent" style="font-size:1.8rem; font-weight:800;">€450K ARR</span></p>
+    </div>
+    <div class="card">
+      <h3>Year 2 Target</h3>
+      <p>120 customers (IR + UK)<br/><span class="accent" style="font-size:1.8rem; font-weight:800;">€2.52M ARR</span></p>
+    </div>
+    <div class="card">
+      <h3>Year 3 Target</h3>
+      <p>280 customers<br/><span class="accent" style="font-size:1.8rem; font-weight:800;">€6.3M ARR</span></p>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 7: Business Model -->
+<section class="slide">
+  <div class="slide-num">7 / 12</div>
+  <div class="tag">Business Model</div>
+  <h2>Simple SaaS. <span class="accent">Sticky by design.</span></h2>
+  <div class="divider"></div>
+  <table>
+    <tr><th>Plan</th><th>Price</th><th>Employees</th><th>Key Features</th></tr>
+    <tr><td>Starter</td><td>€12/emp/mo</td><td>≤ 25</td><td>Slack/Teams, Weekly BRI, Email support</td></tr>
+    <tr><td><strong style="color:var(--orange);">Growth</strong></td><td>€22/emp/mo</td><td>≤ 100</td><td>All integrations, Daily BRI, Intervention library</td></tr>
+    <tr><td>Scale</td><td>€35/emp/mo</td><td>100+</td><td>API, Custom integrations, Dedicated CSM</td></tr>
+  </table>
+  <br/>
+  <div class="grid2">
+    <div class="card">
+      <h3>Why Customers Stay</h3>
+      <ul>
+        <li>12-week rolling baseline requires time investment to recreate</li>
+        <li>Intervention history creates HR audit trail</li>
+        <li>Integration with HR platform stack creates switching costs</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Distribution Channels</h3>
+      <ul>
+        <li>EAP partnerships (Laya Healthcare, VHI)</li>
+        <li>IBEC member distribution</li>
+        <li>HR platform integrations (BambooHR, HiBob)</li>
+        <li>Direct inbound (content: burnout ROI calculator)</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 8: Traction -->
+<section class="slide">
+  <div class="slide-num">8 / 12</div>
+  <div class="tag">Traction</div>
+  <h2>Early signals in a <span class="accent">private beta</span></h2>
+  <div class="divider"></div>
+  <div class="grid3">
+    <div class="card">
+      <div class="big-stat">5</div>
+      <div class="big-stat-label">Beta customers actively using MangoMind</div>
+    </div>
+    <div class="card">
+      <div class="big-stat">94%</div>
+      <div class="big-stat-label">Beta customer retention at 90 days</div>
+    </div>
+    <div class="card">
+      <div class="big-stat">3</div>
+      <div class="big-stat-label">LOIs from IBEC member companies (pilot conversion pending)</div>
+    </div>
+  </div>
+  <br/>
+  <div class="card">
+    <h3>Validation Signals</h3>
+    <ul>
+      <li>UCD School of Psychology research partnership agreed — MBI calibration study Q3 2026</li>
+      <li>Laya Healthcare partnership discussions at stage 2</li>
+      <li>Product Hunt launch: 847 upvotes, featured in "Mental Health Tech" collection</li>
+      <li>NCI New Frontiers Phase 2 award (€30K non-dilutive grant)</li>
+    </ul>
+  </div>
+</section>
+
+<!-- SLIDE 9: Team -->
+<section class="slide">
+  <div class="slide-num">9 / 12</div>
+  <div class="tag">The Team</div>
+  <h2>The right people for a <span class="accent">hard problem</span></h2>
+  <div class="divider"></div>
+  <div class="grid3">
+    <div class="card">
+      <h3>Aoife Brennan</h3>
+      <p style="color:var(--teal); font-size:0.85rem; margin-bottom:0.75rem;">CEO & Co-founder</p>
+      <ul>
+        <li>11 years HR leadership, Dublin tech sector</li>
+        <li>NCI MSc AI in Business (2025)</li>
+        <li>Former Head of People, 3 Irish scale-ups</li>
+        <li>Personal experience with team burnout crisis (2025)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Ronan Fahy</h3>
+      <p style="color:var(--teal); font-size:0.85rem; margin-bottom:0.75rem;">CTO & Co-founder</p>
+      <ul>
+        <li>Former CTO, Dublin fintech (150-person exit, €22M)</li>
+        <li>Privacy-preserving ML specialist</li>
+        <li>Federated learning architecture experience</li>
+        <li>GDPR-compliant data pipeline design</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Dr. Ciarán Ó Murchú</h3>
+      <p style="color:var(--teal); font-size:0.85rem; margin-bottom:0.75rem;">CSO & Co-founder</p>
+      <ul>
+        <li>Clinical psychologist, UCD</li>
+        <li>Burnout researcher (12 published papers)</li>
+        <li>MBI validation expert</li>
+        <li>Workplace mental health policy advisor, HSE</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 10: Competition -->
+<section class="slide">
+  <div class="slide-num">10 / 12</div>
+  <div class="tag">Competitive Landscape</div>
+  <h2>The only solution built for <span class="accent">SMB + Privacy + Prevention</span></h2>
+  <div class="divider"></div>
+  <table>
+    <tr><th>Solution</th><th>Prevention?</th><th>SMB-priced?</th><th>No Individual Data?</th><th>EU Compliant?</th></tr>
+    <tr><td>Annual Engagement Survey (Gallup etc.)</td><td style="color:#EF4444;">✗ Reactive</td><td style="color:#EF4444;">✗ Expensive</td><td style="color:#4ADE80;">✓</td><td style="color:#4ADE80;">✓</td></tr>
+    <tr><td>EAP (Laya, VHI)</td><td style="color:#EF4444;">✗ Reactive</td><td style="color:#EF4444;">✗</td><td style="color:#4ADE80;">✓</td><td style="color:#4ADE80;">✓</td></tr>
+    <tr><td>Workplace Wellbeing Apps</td><td style="color:#EF4444;">✗ Coping only</td><td style="color:#FBBF24;">~ Mixed</td><td style="color:#4ADE80;">✓</td><td style="color:#FBBF24;">~ Partial</td></tr>
+    <tr><td>Workforce Analytics (Viva Insights)</td><td style="color:#4ADE80;">✓ Partial</td><td style="color:#EF4444;">✗ Enterprise only</td><td style="color:#EF4444;">✗ Individual visible</td><td style="color:#FBBF24;">~ Partial</td></tr>
+    <tr><td><strong style="color:var(--orange);">MangoMind</strong></td><td style="color:#4ADE80;"><strong>✓ Predictive</strong></td><td style="color:#4ADE80;"><strong>✓ €12–35/emp</strong></td><td style="color:#4ADE80;"><strong>✓ By architecture</strong></td><td style="color:#4ADE80;"><strong>✓ DPIA complete</strong></td></tr>
+  </table>
+</section>
+
+<!-- SLIDE 11: Use of Funds -->
+<section class="slide">
+  <div class="slide-num">11 / 12</div>
+  <div class="tag">Use of Funds</div>
+  <h2>€2M seed to reach <span class="accent">€2.52M ARR</span> in 24 months</h2>
+  <div class="divider"></div>
+  <table>
+    <tr><th>Category</th><th>Allocation</th><th>% of Raise</th></tr>
+    <tr><td>Engineering (4 FTE, 18 months)</td><td>€520K</td><td>26%</td></tr>
+    <tr><td>Product & Design (1 FTE)</td><td>€110K</td><td>5.5%</td></tr>
+    <tr><td>Sales & Marketing</td><td>€280K</td><td>14%</td></tr>
+    <tr><td>Legal & Regulatory Compliance</td><td>€90K</td><td>4.5%</td></tr>
+    <tr><td>Clinical Science (UCD partnership, advisor)</td><td>€60K</td><td>3%</td></tr>
+    <tr><td>Infrastructure (AWS eu-west-1)</td><td>€60K</td><td>3%</td></tr>
+    <tr><td>Operations & Admin</td><td>€80K</td><td>4%</td></tr>
+    <tr><td>Runway Buffer / Strategic Reserve</td><td>€800K</td><td>40%</td></tr>
+    <tr><td><strong>Total</strong></td><td><strong>€2,000K</strong></td><td><strong>100%</strong></td></tr>
+  </table>
+  <br/>
+  <p>40% runway buffer provides 6 months of additional operating capital beyond the 18-month primary plan, targeting a Series A raise at €2.52M ARR.</p>
+</section>
+
+<!-- SLIDE 12: Ask -->
+<section class="slide" style="align-items:center; text-align:center;">
+  <div class="slide-num">12 / 12</div>
+  <div class="tag">The Ask</div>
+  <div class="ask-box">
+    <p style="color:#9CA3AF; margin-bottom:0.5rem;">Seed Round</p>
+    <div class="ask-amount">€2,000,000</div>
+    <p style="color:#D1D5DB; font-size:1.1rem; margin: 1rem 0;">Pre-money valuation: €8M<br/>Equity offered: 20%</p>
+    <p style="color:#9CA3AF; font-size:0.9rem;">Targeting close: June 2026 · Lead investor round</p>
+  </div>
+  <br/>
+  <p>MangoMind is the first burnout-prevention platform purpose-built for Irish SMBs — combining clinical psychology, privacy-preserving AI, and the only architecture in market that physically cannot expose individual employee data.</p>
+  <br/>
+  <p style="color:#6B7280; font-size:0.9rem;">Aoife Brennan · aoife@mangomind.ai · +353 1 234 5678<br/>
+  <a href="index.html" style="color:var(--teal);">Landing Page</a> · <a href="../prototype.html" style="color:var(--teal);">Live Prototype</a></p>
+</section>
+
+<!-- NAV -->
+<div class="slide-nav">
+  <p style="color:#4B5563; margin-bottom:0.75rem; font-size:0.8rem;">QUICK NAVIGATION</p>
+  <a href="index.html">Landing Page</a>
+  <a href="../prototype.html">Live Demo</a>
+</div>
+
+</body>
+</html>

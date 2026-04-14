@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MangoMind – Live Alpha Prototype</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --orange: #FF6B35; --teal: #00A896; --dark: #1A1A2E;
+      --green: #22C55E; --amber: #F59E0B; --red: #EF4444;
+      --light: #F7F9FC; --mid: #4A5568; --white: #FFFFFF;
+    }
+    body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0F172A; color: #E2E8F0; min-height: 100vh; }
+
+    header { background: #1E293B; padding: 1rem 2rem; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #334155; }
+    .logo { font-size: 1.3rem; font-weight: 800; color: #fff; }
+    .logo span { color: var(--orange); }
+    .header-badge { background: rgba(34,197,94,0.15); border: 1px solid var(--green); color: var(--green); padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.78rem; font-weight: 600; }
+
+    .main { max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem; }
+
+    .intro-card { background: #1E293B; border: 1px solid #334155; border-radius: 12px; padding: 1.5rem 2rem; margin-bottom: 2rem; }
+    .intro-card h2 { font-size: 1.3rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .intro-card p { color: #94A3B8; font-size: 0.9rem; line-height: 1.6; }
+
+    .team-header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem; }
+    .team-header h2 { font-size: 1rem; font-weight: 700; color: #94A3B8; }
+    .week-badge { background: #1E293B; border: 1px solid #334155; padding: 0.4rem 0.9rem; border-radius: 8px; font-size: 0.85rem; color: #94A3B8; }
+
+    /* BRI GAUGE */
+    .bri-panel { background: #1E293B; border: 1px solid #334155; border-radius: 16px; padding: 2rem; margin-bottom: 2rem; display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: center; }
+    @media (max-width: 600px) { .bri-panel { grid-template-columns: 1fr; } }
+    .gauge-wrap { text-align: center; }
+    .gauge { width: 180px; height: 180px; margin: 0 auto; position: relative; }
+    .gauge svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+    .gauge-bg { fill: none; stroke: #334155; stroke-width: 16; }
+    .gauge-fill { fill: none; stroke-width: 16; stroke-linecap: round; transition: stroke-dasharray 0.5s ease, stroke 0.5s ease; }
+    .bri-number { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 2.8rem; font-weight: 900; transition: color 0.5s; }
+    .bri-label { position: absolute; bottom: 10%; left: 50%; transform: translateX(-50%); font-size: 0.75rem; color: #64748B; font-weight: 600; white-space: nowrap; }
+    .bri-info h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .bri-info p { font-size: 0.875rem; color: #94A3B8; margin-bottom: 0.75rem; }
+    .trend { display: inline-flex; align-items: center; gap: 0.4rem; font-weight: 700; font-size: 0.9rem; padding: 0.3rem 0.75rem; border-radius: 20px; }
+
+    /* SLIDERS */
+    .signals-panel { background: #1E293B; border: 1px solid #334155; border-radius: 16px; padding: 2rem; margin-bottom: 2rem; }
+    .signals-panel h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.25rem; }
+    .signals-panel .sub { font-size: 0.8rem; color: #64748B; margin-bottom: 1.5rem; }
+    .signal-row { margin-bottom: 1.5rem; }
+    .signal-header { display: flex; justify-content: space-between; margin-bottom: 0.5rem; }
+    .signal-name { font-size: 0.875rem; font-weight: 600; }
+    .signal-val { font-size: 0.875rem; font-weight: 700; color: var(--orange); }
+    input[type=range] { width: 100%; accent-color: var(--orange); cursor: pointer; height: 6px; }
+    .signal-labels { display: flex; justify-content: space-between; font-size: 0.72rem; color: #475569; margin-top: 0.3rem; }
+
+    /* RECOMMENDATION */
+    .rec-card { border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem; border-left: 5px solid; transition: all 0.5s; }
+    .rec-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .rec-card p { font-size: 0.9rem; line-height: 1.6; }
+    .rec-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1rem; }
+    .rec-btn { padding: 0.5rem 1rem; border-radius: 8px; font-size: 0.82rem; font-weight: 600; border: none; cursor: pointer; }
+
+    /* TRANSPARENCY */
+    .transparency { background: #0F2037; border: 1px solid #1E3A5F; border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem; }
+    .transparency h3 { font-size: 0.9rem; font-weight: 700; color: var(--teal); margin-bottom: 0.75rem; }
+    .track-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+    @media (max-width: 500px) { .track-grid { grid-template-columns: 1fr; } }
+    .track-item { font-size: 0.82rem; color: #94A3B8; }
+    .track-item.yes::before { content: "✓ "; color: var(--teal); }
+    .track-item.no::before { content: "✗ "; color: var(--red); }
+
+    /* HISTORY */
+    .history-panel { background: #1E293B; border: 1px solid #334155; border-radius: 16px; padding: 2rem; margin-bottom: 2rem; }
+    .history-panel h3 { font-size: 1rem; font-weight: 700; margin-bottom: 1.5rem; }
+    .sparkline { display: flex; align-items: flex-end; gap: 4px; height: 60px; }
+    .bar { flex: 1; border-radius: 4px 4px 0 0; transition: height 0.3s; min-width: 8px; }
+    .week-labels { display: flex; gap: 4px; margin-top: 0.5rem; }
+    .wl { flex: 1; text-align: center; font-size: 0.68rem; color: #475569; }
+
+    footer { text-align: center; padding: 2rem; color: #475569; font-size: 0.8rem; border-top: 1px solid #1E293B; margin-top: 1rem; }
+    footer a { color: var(--teal); }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo"><span>Mango</span>Mind</div>
+  <div style="display:flex;align-items:center;gap:1rem;">
+    <span class="header-badge">Alpha Prototype</span>
+    <a href="MangoMind/index.html" style="color:#64748B;font-size:0.85rem;text-decoration:none;">← Landing Page</a>
+  </div>
+</header>
+
+<div class="main">
+
+  <div class="intro-card">
+    <h2>Team Burnout Risk Dashboard</h2>
+    <p>This is a working alpha prototype of MangoMind. Adjust the signal sliders below to simulate different team conditions and see how the Burnout Risk Index (BRI) responds in real time. In production, these signals are captured automatically and anonymously from your connected workplace tools — no manual input required.</p>
+  </div>
+
+  <div class="team-header">
+    <h2>Product Team – Dublin (8 members)</h2>
+    <div class="week-badge">Week of 14 April 2026</div>
+  </div>
+
+  <!-- BRI Gauge Panel -->
+  <div class="bri-panel">
+    <div class="gauge-wrap">
+      <div class="gauge">
+        <svg viewBox="0 0 120 120">
+          <circle class="gauge-bg" cx="60" cy="60" r="50" />
+          <circle class="gauge-fill" id="gaugeFill" cx="60" cy="60" r="50"
+            stroke-dasharray="0 314" stroke-dashoffset="0" />
+        </svg>
+        <div class="bri-number" id="briNumber">—</div>
+        <div class="bri-label">BRI</div>
+      </div>
+      <div id="trendBadge" class="trend" style="margin-top:1rem; justify-content:center;"></div>
+    </div>
+    <div class="bri-info">
+      <h3 id="briCategory">Loading...</h3>
+      <p id="briDesc">Adjust the sliders to calculate your team's Burnout Risk Index.</p>
+      <p style="color:#475569; font-size:0.8rem; margin-top:0.5rem;">Team baseline (4-week avg): <strong id="baseline" style="color:#94A3B8;"></strong></p>
+      <p style="color:#475569; font-size:0.8rem;">Minimum cohort for this report: <strong style="color:#94A3B8;">8 members (k≥5 ✓)</strong></p>
+    </div>
+  </div>
+
+  <!-- Signal Sliders -->
+  <div class="signals-panel">
+    <h3>Simulated Team Signals</h3>
+    <p class="sub">In production, these values are captured automatically from Slack, Teams, and Calendar metadata. Message content is never read.</p>
+
+    <div class="signal-row">
+      <div class="signal-header">
+        <span class="signal-name">After-hours messages (% above baseline)</span>
+        <span class="signal-val" id="val1">45</span>
+      </div>
+      <input type="range" id="s1" min="0" max="100" value="45" oninput="updateBRI()" />
+      <div class="signal-labels"><span>Normal</span><span>Elevated</span><span>Critical</span></div>
+    </div>
+
+    <div class="signal-row">
+      <div class="signal-header">
+        <span class="signal-name">Meeting density (% of workday in meetings)</span>
+        <span class="signal-val" id="val2">60</span>
+      </div>
+      <input type="range" id="s2" min="0" max="100" value="60" oninput="updateBRI()" />
+      <div class="signal-labels"><span>Low</span><span>Moderate</span><span>Overloaded</span></div>
+    </div>
+
+    <div class="signal-row">
+      <div class="signal-header">
+        <span class="signal-name">Pulse check-in sentiment (inverted: 0=positive, 100=negative)</span>
+        <span class="signal-val" id="val3">40</span>
+      </div>
+      <input type="range" id="s3" min="0" max="100" value="40" oninput="updateBRI()" />
+      <div class="signal-labels"><span>Positive</span><span>Neutral</span><span>Negative</span></div>
+    </div>
+
+    <div class="signal-row">
+      <div class="signal-header">
+        <span class="signal-name">Response latency change (% slower than baseline)</span>
+        <span class="signal-val" id="val4">30</span>
+      </div>
+      <input type="range" id="s4" min="0" max="100" value="30" oninput="updateBRI()" />
+      <div class="signal-labels"><span>No change</span><span>Slower</span><span>Disengaged</span></div>
+    </div>
+  </div>
+
+  <!-- Recommendation Card -->
+  <div id="recCard" class="rec-card">
+    <h3 id="recTitle">—</h3>
+    <p id="recText">—</p>
+    <div class="rec-actions" id="recActions"></div>
+  </div>
+
+  <!-- Historical Sparkline -->
+  <div class="history-panel">
+    <h3>4-Week BRI History (Simulated)</h3>
+    <div class="sparkline" id="sparkline"></div>
+    <div class="week-labels" id="weekLabels"></div>
+  </div>
+
+  <!-- Transparency Panel -->
+  <div class="transparency">
+    <h3>What MangoMind tracks for this team</h3>
+    <div class="track-grid">
+      <div class="track-item yes">Message send/receive timing</div>
+      <div class="track-item yes">Calendar meeting density</div>
+      <div class="track-item yes">After-hours activity frequency</div>
+      <div class="track-item yes">Optional pulse check-in responses</div>
+      <div class="track-item yes">Response latency changes</div>
+      <div class="track-item yes">Meeting-free focus time trends</div>
+      <div class="track-item no">Message content (never read)</div>
+      <div class="track-item no">Individual employee scores (never shown)</div>
+      <div class="track-item no">Protected characteristics</div>
+      <div class="track-item no">Performance metrics</div>
+    </div>
+    <p style="margin-top:1rem; font-size:0.78rem; color:#475569;">Data is aggregated using k-anonymity (k≥5). Individual signals are processed on-device and never transmitted in raw form. Aggregated scores retained 36 months; raw signals deleted within 24 hours of processing.</p>
+  </div>
+
+</div>
+
+<footer>
+  <p>MangoMind Alpha Prototype · Student ID: x25108093 · NCI MSCAI 2026</p>
+  <p style="margin-top:0.5rem;"><a href="MangoMind/index.html">Landing Page</a> · <a href="MangoMind/pitch.html">Investor Pitch</a></p>
+  <p style="margin-top:0.5rem; color:#334155;">This prototype uses simulated data only. No real employee data is collected or processed.</p>
+</footer>
+
+<script>
+  const BASELINE = 42;
+
+  function updateBRI() {
+    const s1 = +document.getElementById('s1').value;
+    const s2 = +document.getElementById('s2').value;
+    const s3 = +document.getElementById('s3').value;
+    const s4 = +document.getElementById('s4').value;
+
+    document.getElementById('val1').textContent = s1;
+    document.getElementById('val2').textContent = s2;
+    document.getElementById('val3').textContent = s3;
+    document.getElementById('val4').textContent = s4;
+
+    // Weighted BRI formula: after-hours 35%, meetings 25%, sentiment 25%, latency 15%
+    const bri = Math.round(s1 * 0.35 + s2 * 0.25 + s3 * 0.25 + s4 * 0.15);
+
+    // Update gauge
+    const circumference = 2 * Math.PI * 50; // ~314
+    const fill = (bri / 100) * circumference;
+    const gauge = document.getElementById('gaugeFill');
+    gauge.setAttribute('stroke-dasharray', `${fill} ${circumference}`);
+
+    let color, category, desc;
+    if (bri <= 30) {
+      color = '#22C55E'; category = 'Healthy'; desc = 'Your team signals are within normal range. Maintain regular check-in cadence.';
+    } else if (bri <= 50) {
+      color = '#84CC16'; category = 'Mild Elevation'; desc = 'Low-level stress signals detected. Consider a team working-hours review this sprint.';
+    } else if (bri <= 65) {
+      color = '#F59E0B'; category = 'Moderate Risk'; desc = 'Moderate burnout risk detected across the team. Recommend informal 1:1 wellness conversations.';
+    } else if (bri <= 80) {
+      color = '#EF4444'; category = 'High Risk'; desc = 'High burnout risk. Recommend activating your EAP resources and reviewing workload distribution immediately.';
+    } else {
+      color = '#DC2626'; category = 'Critical Alert'; desc = 'Critical burnout risk signals. Immediate HR intervention recommended. Contact your EAP provider today.';
+    }
+
+    gauge.setAttribute('stroke', color);
+    document.getElementById('briNumber').textContent = bri;
+    document.getElementById('briNumber').style.color = color;
+    document.getElementById('briCategory').textContent = category;
+    document.getElementById('briDesc').textContent = desc;
+    document.getElementById('baseline').textContent = BASELINE;
+
+    // Trend
+    const delta = bri - BASELINE;
+    const trendEl = document.getElementById('trendBadge');
+    if (delta > 5) {
+      trendEl.textContent = '↑ Worsening vs. baseline';
+      trendEl.style.cssText = 'background:rgba(239,68,68,0.15);color:#EF4444;';
+    } else if (delta < -5) {
+      trendEl.textContent = '↓ Improving vs. baseline';
+      trendEl.style.cssText = 'background:rgba(34,197,94,0.15);color:#22C55E;';
+    } else {
+      trendEl.textContent = '→ Stable vs. baseline';
+      trendEl.style.cssText = 'background:rgba(148,163,184,0.15);color:#94A3B8;';
+    }
+    trendEl.className = 'trend';
+
+    // Recommendation card
+    const rec = document.getElementById('recCard');
+    rec.style.background = color + '15';
+    rec.style.borderLeftColor = color;
+    document.getElementById('recTitle').textContent = 'Recommended Action: ' + category;
+    document.getElementById('recText').textContent = desc;
+
+    const actions = document.getElementById('recActions');
+    actions.innerHTML = '';
+    if (bri > 50) {
+      const btns = [
+        {label:'View EAP Resources', bg:color},
+        {label:'Log HR Intervention', bg:'#1E293B'},
+        {label:'Schedule Team Check-in', bg:'#1E293B'},
+      ];
+      btns.forEach(b => {
+        const el = document.createElement('button');
+        el.className = 'rec-btn';
+        el.textContent = b.label;
+        el.style.background = b.bg;
+        el.style.color = '#fff';
+        el.style.border = `1px solid ${color}`;
+        el.onclick = () => alert('In production, this would open the ' + b.label + ' workflow.');
+        actions.appendChild(el);
+      });
+    }
+
+    updateSparkline(bri);
+  }
+
+  function updateSparkline(currentBri) {
+    const weeks = ['4w ago', '3w ago', '2w ago', 'Last week', 'This week'];
+    const history = [38, 41, 44, 47, currentBri];
+    const sp = document.getElementById('sparkline');
+    const wl = document.getElementById('weekLabels');
+    sp.innerHTML = ''; wl.innerHTML = '';
+    const max = Math.max(...history, 60);
+    history.forEach((v, i) => {
+      const bar = document.createElement('div');
+      bar.className = 'bar';
+      const pct = (v / max) * 100;
+      bar.style.height = pct + '%';
+      let c = '#22C55E';
+      if (v > 65) c = '#EF4444';
+      else if (v > 50) c = '#F59E0B';
+      else if (v > 35) c = '#84CC16';
+      bar.style.background = i === 4 ? c : c + '80';
+      sp.appendChild(bar);
+      const lbl = document.createElement('div');
+      lbl.className = 'wl';
+      lbl.textContent = weeks[i];
+      wl.appendChild(lbl);
+    });
+  }
+
+  // Init
+  updateBRI();
+</script>
+</body>
+</html>
