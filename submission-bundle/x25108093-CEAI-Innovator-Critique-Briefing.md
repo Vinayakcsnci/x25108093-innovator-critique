@@ -36,8 +36,8 @@
 | **GitHub Pages – Landing Page** | https://vinayakcsnci.github.io/x25108093-innovator-critique/index.html |
 | **GitHub Pages – Pitch Deck** | https://vinayakcsnci.github.io/x25108093-innovator-critique/pitch.html |
 | **GitHub Pages – Prototype** | https://vinayakcsnci.github.io/x25108093-innovator-critique/prototype.html |
-| **Initial Commit Hash** | *(recorded after push — see repository)* |
-| **Prototype Commit Hash** | *(recorded after push — see repository)* |
+| **Initial Commit Hash** | `5e7713159ea958c32bd6c29b2f99c2d78d5a2c4f` |
+| **Prototype Commit Hash** | `5e7713159ea958c32bd6c29b2f99c2d78d5a2c4f` (same commit — prototype included in initial push) |
 
 ---
 
