@@ -170,7 +170,9 @@
   <!-- Recommendation Card -->
   <div id="recCard" class="rec-card">
     <h3 id="recTitle">—</h3>
+    <p id="recSummary" style="font-weight:600; margin-bottom:0.5rem;"></p>
     <p id="recText">—</p>
+    <div id="signalBreakdown" style="margin-top:1.2rem;"></div>
     <div class="rec-actions" id="recActions"></div>
   </div>
 
@@ -210,45 +212,91 @@
 <script>
   const BASELINE = 42;
 
+  // Per-signal recommendation library keyed by signal index and severity
+  const SIGNAL_RECS = {
+    0: { // After-hours messages
+      name: 'After-Hours Messaging',
+      icon: '🌙',
+      mild:    'After-hours messaging is slightly elevated. Remind the team of your communication norms — no expectation to reply outside working hours. Consider adding a Slack status reminder at 6 pm.',
+      moderate:'After-hours messaging is notably elevated. Your team is extending their working day digitally. Introduce a "right to disconnect" reminder in the next team standup and review sprint capacity. Consider a temporary no-Slack-after-7pm norm.',
+      high:    'After-hours messaging is critically high — a strong predictor of impending burnout. Urgently review the team\'s workload and upcoming deadlines. Raise with line managers. If a deadline is driving this, negotiate scope; if it\'s cultural, implement a hard after-hours DND policy this week.',
+      actions: ['Review sprint scope', 'Set after-hours DND policy', 'Message team re: disconnect norms']
+    },
+    1: { // Meeting density
+      name: 'Meeting Density',
+      icon: '📅',
+      mild:    'Meeting load is moderately high. Audit recurring meetings — cancel or shorten any that lack a clear agenda. Protect at least 2 hours of uninterrupted focus time per day per team member.',
+      moderate:'Meeting density is significantly elevated. Deep work is likely impossible. Implement a "no-meeting morning" policy (e.g., no calls before noon, Mon–Wed). Audit and cancel low-value recurring meetings this week.',
+      high:    'Meeting density is unsustainable — the team has almost no focus time. Declare a meeting-free day immediately. Cancel all non-essential recurring meetings. No new meetings for the next 2 weeks without approval. This is a direct contributor to cognitive exhaustion.',
+      actions: ['Audit recurring meetings', 'Declare meeting-free morning', 'Block focus time in calendars']
+    },
+    2: { // Sentiment
+      name: 'Pulse Check-in Sentiment',
+      icon: '💬',
+      mild:    'Pulse sentiment is dipping below your team\'s normal range. Acknowledge the team\'s effort in the next standup. Ask openly: "What\'s one thing making work harder this week?" — listen without fixing.',
+      moderate:'Sentiment signals show the team is struggling emotionally. Schedule a no-agenda team wellbeing conversation (30 min, voluntary). Share EAP details proactively — not as a crisis signal, but as a benefit reminder. Consider a reduced-pace sprint.',
+      high:    'Sentiment is critically negative. The team is telling you they are not okay. Individual 1:1 conversations are needed this week — not performance-focused, wellbeing-focused. Activate EAP and contact your EAP provider for manager guidance. Do not wait.',
+      actions: ['Send EAP resource to team', 'Schedule wellbeing 1:1s', 'Reduce sprint velocity']
+    },
+    3: { // Response latency
+      name: 'Response Latency',
+      icon: '⏱',
+      mild:    'Response times are slightly slower than your team\'s baseline — an early signal of cognitive load. Check whether any team members are context-switching heavily. Reduce interrupt-driven work where possible.',
+      moderate:'Response latency is noticeably slower — a sign of mental fatigue or disengagement. Review whether individuals are overloaded with parallel workstreams. Consider reducing meeting frequency to restore focus capacity. Check in informally.',
+      high:    'Severely slowed response latency indicates possible disengagement or exhaustion. Some team members may be experiencing depressive symptoms associated with burnout. This requires direct, compassionate HR engagement. Do not address over Slack — schedule face-to-face or video conversations.',
+      actions: ['Reduce parallel workstreams', 'Schedule informal check-ins', 'Review workload distribution']
+    }
+  };
+
+  function getSeverityKey(val) {
+    if (val < 40) return null;
+    if (val < 65) return 'mild';
+    if (val < 80) return 'moderate';
+    return 'high';
+  }
+
   function updateBRI() {
-    const s1 = +document.getElementById('s1').value;
-    const s2 = +document.getElementById('s2').value;
-    const s3 = +document.getElementById('s3').value;
-    const s4 = +document.getElementById('s4').value;
+    const vals = [
+      +document.getElementById('s1').value,
+      +document.getElementById('s2').value,
+      +document.getElementById('s3').value,
+      +document.getElementById('s4').value
+    ];
+    const weights = [0.35, 0.25, 0.25, 0.15];
 
-    document.getElementById('val1').textContent = s1;
-    document.getElementById('val2').textContent = s2;
-    document.getElementById('val3').textContent = s3;
-    document.getElementById('val4').textContent = s4;
+    vals.forEach((v, i) => { document.getElementById('val' + (i+1)).textContent = v; });
 
-    // Weighted BRI formula: after-hours 35%, meetings 25%, sentiment 25%, latency 15%
-    const bri = Math.round(s1 * 0.35 + s2 * 0.25 + s3 * 0.25 + s4 * 0.15);
+    // Weighted BRI
+    const bri = Math.round(vals.reduce((sum, v, i) => sum + v * weights[i], 0));
 
-    // Update gauge
-    const circumference = 2 * Math.PI * 50; // ~314
+    // Gauge
+    const circumference = 2 * Math.PI * 50;
     const fill = (bri / 100) * circumference;
     const gauge = document.getElementById('gaugeFill');
     gauge.setAttribute('stroke-dasharray', `${fill} ${circumference}`);
 
-    let color, category, desc;
-    if (bri <= 30) {
-      color = '#22C55E'; category = 'Healthy'; desc = 'Your team signals are within normal range. Maintain regular check-in cadence.';
-    } else if (bri <= 50) {
-      color = '#84CC16'; category = 'Mild Elevation'; desc = 'Low-level stress signals detected. Consider a team working-hours review this sprint.';
-    } else if (bri <= 65) {
-      color = '#F59E0B'; category = 'Moderate Risk'; desc = 'Moderate burnout risk detected across the team. Recommend informal 1:1 wellness conversations.';
-    } else if (bri <= 80) {
-      color = '#EF4444'; category = 'High Risk'; desc = 'High burnout risk. Recommend activating your EAP resources and reviewing workload distribution immediately.';
-    } else {
-      color = '#DC2626'; category = 'Critical Alert'; desc = 'Critical burnout risk signals. Immediate HR intervention recommended. Contact your EAP provider today.';
-    }
+    let color, category;
+    if      (bri <= 30) { color = '#22C55E'; category = 'Healthy'; }
+    else if (bri <= 50) { color = '#84CC16'; category = 'Mild Elevation'; }
+    else if (bri <= 65) { color = '#F59E0B'; category = 'Moderate Risk'; }
+    else if (bri <= 80) { color = '#EF4444'; category = 'High Risk'; }
+    else                { color = '#DC2626'; category = 'Critical Alert'; }
 
     gauge.setAttribute('stroke', color);
     document.getElementById('briNumber').textContent = bri;
     document.getElementById('briNumber').style.color = color;
     document.getElementById('briCategory').textContent = category;
-    document.getElementById('briDesc').textContent = desc;
     document.getElementById('baseline').textContent = BASELINE;
+
+    // BRI description
+    const briDescs = {
+      'Healthy':        'All team signals are within your normal range. No intervention required — maintain your current check-in cadence.',
+      'Mild Elevation': 'One or more signals show early stress. Monitor closely this week and address the dominant signal noted below.',
+      'Moderate Risk':  'Multiple signals are elevated above your team baseline. Take the signal-specific actions below before next sprint.',
+      'High Risk':      'Strong burnout risk indicators across your team. Immediate, structured HR action is required this week.',
+      'Critical Alert': 'Severe and multi-signal burnout crisis detected. Escalate to senior management and EAP provider today.'
+    };
+    document.getElementById('briDesc').textContent = briDescs[category];
 
     // Trend
     const delta = bri - BASELINE;
@@ -265,29 +313,71 @@
     }
     trendEl.className = 'trend';
 
-    // Recommendation card
-    const rec = document.getElementById('recCard');
-    rec.style.background = color + '15';
-    rec.style.borderLeftColor = color;
-    document.getElementById('recTitle').textContent = 'Recommended Action: ' + category;
-    document.getElementById('recText').textContent = desc;
+    // --- Signal-specific recommendation engine ---
+    // Find dominant signal (highest weighted contribution)
+    const contributions = vals.map((v, i) => ({ idx: i, contrib: v * weights[i], raw: v }));
+    contributions.sort((a, b) => b.contrib - a.contrib);
+    const dominant = contributions[0];
+    const domRec = SIGNAL_RECS[dominant.idx];
+    const domSev = getSeverityKey(dominant.raw);
 
+    const rec = document.getElementById('recCard');
+    rec.style.background = color + '18';
+    rec.style.borderLeftColor = color;
+
+    document.getElementById('recTitle').textContent =
+      bri <= 30 ? 'Team is Healthy — Keep Going' : `Priority Action: Address ${domRec.icon} ${domRec.name}`;
+
+    document.getElementById('recSummary').textContent =
+      bri <= 30 ? '' :
+      `Dominant signal: ${domRec.icon} ${domRec.name} (contributing ${Math.round(dominant.contrib)}/${bri} BRI points)`;
+
+    document.getElementById('recText').textContent =
+      bri <= 30
+        ? 'Your team signals are healthy. Continue regular pulse check-ins and protect focus time. Review again next week.'
+        : (domSev ? domRec[domSev] : domRec.mild);
+
+    // Signal breakdown table
+    const bdEl = document.getElementById('signalBreakdown');
+    if (bri > 30) {
+      const rows = contributions.map(c => {
+        const r = SIGNAL_RECS[c.idx];
+        const sev = getSeverityKey(c.raw);
+        const sevColor = !sev ? '#22C55E' : sev === 'mild' ? '#84CC16' : sev === 'moderate' ? '#F59E0B' : '#EF4444';
+        const sevLabel = !sev ? 'Normal' : sev.charAt(0).toUpperCase() + sev.slice(1);
+        const pct = Math.round((c.contrib / (bri || 1)) * 100);
+        return `<tr>
+          <td style="padding:0.45rem 0.5rem; font-size:0.82rem; color:#D1D5DB;">${r.icon} ${r.name}</td>
+          <td style="padding:0.45rem 0.5rem; font-size:0.82rem;">
+            <div style="background:#334155;border-radius:4px;height:6px;width:100%;min-width:80px;">
+              <div style="background:${sevColor};border-radius:4px;height:6px;width:${pct}%;"></div>
+            </div>
+          </td>
+          <td style="padding:0.45rem 0.5rem; font-size:0.78rem; font-weight:700; color:${sevColor}; white-space:nowrap;">${sevLabel} (${pct}%)</td>
+        </tr>`;
+      }).join('');
+      bdEl.innerHTML = `
+        <p style="font-size:0.78rem;color:#64748B;margin-bottom:0.5rem;font-weight:600;">SIGNAL BREAKDOWN</p>
+        <table style="width:100%;border-collapse:collapse;">${rows}</table>`;
+    } else {
+      bdEl.innerHTML = '';
+    }
+
+    // Action buttons — signal-specific
     const actions = document.getElementById('recActions');
     actions.innerHTML = '';
-    if (bri > 50) {
-      const btns = [
-        {label:'View EAP Resources', bg:color},
-        {label:'Log HR Intervention', bg:'#1E293B'},
-        {label:'Schedule Team Check-in', bg:'#1E293B'},
-      ];
-      btns.forEach(b => {
+    if (bri > 30) {
+      const btns = bri > 50
+        ? [...domRec.actions, 'View EAP Resources']
+        : domRec.actions.slice(0, 2);
+      btns.forEach((label, i) => {
         const el = document.createElement('button');
         el.className = 'rec-btn';
-        el.textContent = b.label;
-        el.style.background = b.bg;
+        el.textContent = label;
+        el.style.background = i === 0 ? color : '#1E293B';
         el.style.color = '#fff';
-        el.style.border = `1px solid ${color}`;
-        el.onclick = () => alert('In production, this would open the ' + b.label + ' workflow.');
+        el.style.border = `1px solid ${color}40`;
+        el.onclick = () => alert(`In production, this would open the "${label}" workflow for your HR dashboard.`);
         actions.appendChild(el);
       });
     }
